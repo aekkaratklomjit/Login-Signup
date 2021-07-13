@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, Button} from 'react-native'
 
-class Home extends Component {
+class HomeScreen extends Component {
     render() {
         return (
             <View>
@@ -16,6 +16,6 @@ class Home extends Component {
         )
     }
 }
-export default Home
+export default HomeScreen
 
 const styles = StyleSheet.create({})

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 
-export class Detail extends Component {
+export class ExploreScreen extends Component {
     render() {
         return (
             <View>
@@ -11,4 +11,4 @@ export class Detail extends Component {
     }
 }
 
-export default Detail
+export default ExploreScreen
