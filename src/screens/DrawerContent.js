@@ -54,7 +54,7 @@ export function DrawerContent(props) {
           <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="home-outline" 
+                                name="home"
                                 color={color}
                                 size={size}
                                 />
@@ -65,7 +65,8 @@ export function DrawerContent(props) {
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="account-outline" 
+                                name="user"
+                                type="font-awesome" 
                                 color={color}
                                 size={size}
                                 />
@@ -87,7 +88,7 @@ export function DrawerContent(props) {
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="settings-outline" 
+                                name="settings" 
                                 color={color}
                                 size={size}
                                 />
@@ -98,7 +99,8 @@ export function DrawerContent(props) {
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
-                                name="account-check-outline" 
+                                name="address-book" 
+                                type="font-awesome" 
                                 color={color}
                                 size={size}
                                 />
