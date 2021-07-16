@@ -11,39 +11,41 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import * as Animatable from 'react-native-animatable';
 
 // create a component
-const SplashScreen = () => {
+const SplashScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image
+        <Animatable.Image
+          animation="bounceIn"
+          duraton="1500"
           source={require('../assets/logo.png')}
-          styles={styles.logo}
-          //resizeMode="stretch"
+          style={styles.logo}
+          resizeMode="stretch"
         />
       </View>
-      <View style={styles.footer}>
+      <Animatable.View style={styles.footer}
+        animation="fadeInUpBig">
         <Text style={styles.title}>SplashScreen</Text>
         <Text style={styles.text}>Sign in with account</Text>
         <View style={styles.button}>
-        <TouchableOpacity onPress={null}>
-          <LinearGradient colors={['#08d4c4', '#01ab9d']} style={styles.signIn}>
-            <Text style={styles.textSign}>Get started</Text>
-            <MaterialIcons
-                name="navigate-next"
-                color="#fff"
-                size={20}
-                />
-          </LinearGradient>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('SignInScreen')}>
+            <LinearGradient
+              colors={['#08d4c4', '#01ab9d']}
+              style={styles.signIn}>
+              <Text style={styles.textSign}>Get started</Text>
+              <MaterialIcons name="navigate-next" color="#fff" size={20} />
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
-      </View>
+      </Animatable.View>
     </View>
   );
 };
 
-const {height} = Dimensions.get('screen');
+const {height} = Dimensions.get('window');
 const height_logo = height * 0.28;
 // define your styles
 const styles = StyleSheet.create({
