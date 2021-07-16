@@ -15,7 +15,7 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 
 // create a component
-const SignInScreen = () => {
+const SignInScreen = ({navigation}) => {
   const [data, setData] = React.useState({
     email: '',
     password: '',
@@ -51,10 +51,13 @@ const SignInScreen = () => {
   };
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor='#009387' barStyle='light-content' />
       <View style={styles.header}>
         <Text style={styles.text_header}>Wellcome !!</Text>
       </View>
-      <View style={styles.footer}>
+      <Animatable.View 
+      style={styles.footer}
+      animation="fadeInUpBig">
         <Text style={styles.text_footer}>Email</Text>
         <View style={styles.action}>
           <Icon name="user-o" color="black" type="font-awesome" size={20} />
@@ -101,17 +104,17 @@ const SignInScreen = () => {
         <View style={styles.button}>
           <LinearGradient colors={['#08d4c4', '#01ab9d']} style={styles.signIn}>
             <Text
-              style={[
-                styles.signIn,
-                {
-                  color: 'red',
-                },
-              ]}>
+              style={[styles.textSign,{color:'#fff'}]}>
               Sign In
             </Text>
-          </LinearGradient>
+            </LinearGradient>
+            <TouchableOpacity
+              onPress={()=>navigation.navigate('SignUpScreen')}
+              style={[styles.signIn,{borderColor:'#009387',borderWidth:1,marginTop:15}]}>
+              <Text>Sign Up</Text>
+            </TouchableOpacity>
         </View>
-      </View>
+      </Animatable.View>
     </View>
   );
 };
