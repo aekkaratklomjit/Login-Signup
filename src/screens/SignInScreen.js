@@ -13,26 +13,28 @@ import {
 import {Icon} from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
+import { AuthContext } from '../components/context';
 
 // create a component
 const SignInScreen = ({navigation}) => {
   const [data, setData] = React.useState({
-    email: '',
+    username: '',
     password: '',
     check_textInputChange: false,
     secureTextEntry: true,
   });
+  const {signIn} = React.useContext(AuthContext)
   const textInputChange = val => {
     if (val.length != 0) {
       setData({
         ...data,
-        email: val,
+        username: val,
         check_textInputChange: true,
       });
     } else {
       setData({
         ...data,
-        email: val,
+        username: val,
         check_textInputChange: false,
       });
     }
@@ -49,6 +51,10 @@ const SignInScreen = ({navigation}) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
+
+  const loginHandle = (username,password) =>{
+    signIn(username,password)
+  }
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#009387' barStyle='light-content' />
@@ -102,12 +108,17 @@ const SignInScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.button}>
+          <TouchableOpacity
+                    style={styles.signIn}
+                    onPress={() => {loginHandle(data.username,data.password)}}>
           <LinearGradient colors={['#08d4c4', '#01ab9d']} style={styles.signIn}>
             <Text
               style={[styles.textSign,{color:'#fff'}]}>
               Sign In
             </Text>
             </LinearGradient>
+            </TouchableOpacity>
+
             <TouchableOpacity
               onPress={()=>navigation.navigate('SignUpScreen')}
               style={[styles.signIn,{borderColor:'#009387',borderWidth:1,marginTop:15}]}>

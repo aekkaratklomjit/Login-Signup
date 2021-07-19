@@ -13,9 +13,11 @@ import {
 } from 'react-native-paper';
 import {Icon} from 'react-native-elements';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
+import { AuthContext } from '../components/context';
 
 // create a component
 export function DrawerContent(props) {
+    const {signOut} = React.useContext(AuthContext);
     const [isDarkTheme,setIsDarkTheme] = React.useState(false);
     const toggleTheme=()=>{
         setIsDarkTheme(!isDarkTheme)
