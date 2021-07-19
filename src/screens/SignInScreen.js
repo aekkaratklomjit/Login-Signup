@@ -13,7 +13,8 @@ import {
 import {Icon} from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import { AuthContext } from '../components/context';
+import {AuthContext} from '../components/context';
+import Users from '../db/users';
 
 // create a component
 const SignInScreen = ({navigation}) => {
@@ -22,28 +23,41 @@ const SignInScreen = ({navigation}) => {
     password: '',
     check_textInputChange: false,
     secureTextEntry: true,
+    isValidUser: true,
+    isValidPassword: true,
   });
-  const {signIn} = React.useContext(AuthContext)
+  const {signIn} = React.useContext(AuthContext);
   const textInputChange = val => {
-    if (val.length != 0) {
+    if (val.trim().length >= 4) {
       setData({
         ...data,
         username: val,
         check_textInputChange: true,
+        isValidUser: true
       });
     } else {
       setData({
         ...data,
         username: val,
         check_textInputChange: false,
+        isValidUser: false
       });
     }
   };
-  const textPasswordChange = val => {
+  const handlePasswordChange = val => {
+    if(val.trim().length>=8){
     setData({
       ...data,
       password: val,
+      isValidPassword:true
     });
+  }else{
+    setData({
+      ...data,
+      password: val,
+      isValidPassword:false
+    });
+    }
   };
   const updateSecureTextEntry = () => {
     setData({
@@ -52,18 +66,44 @@ const SignInScreen = ({navigation}) => {
     });
   };
 
-  const loginHandle = (username,password) =>{
-    signIn(username,password)
+  const loginHandle = (username, password) => {
+    const foundUser = Users.filter(item=>{
+      return username == item.username && password == item.password;
+    })
+    if(data.username.length==0 || data.password.length==0){
+      Alert.alert('Wrong Input !','Username or password field cannot be empty.',[
+        {text: 'OK'}
+      ]);
+      return;
+    }
+    if(foundUser.length == 0 ){
+      Alert.alert('Invalid User !','Username or password is incorrect',[
+        {text: 'OK'}
+      ]);
+      return;
+    }
+    signIn(foundUser);
+  };
+  const handleValidUser = (val) =>{
+    if(val.trim().length >= 4){
+      setData({
+        ...data,
+        isValidUser:true
+      })
+    }else{
+      setData({
+        ...data,
+        isValidUser:false
+      })
+    }
   }
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor='#009387' barStyle='light-content' />
+      <StatusBar backgroundColor="#009387" barStyle="light-content" />
       <View style={styles.header}>
         <Text style={styles.text_header}>Wellcome !!</Text>
       </View>
-      <Animatable.View 
-      style={styles.footer}
-      animation="fadeInUpBig">
+      <Animatable.View style={styles.footer} animation="fadeInUpBig">
         <Text style={styles.text_footer}>Email</Text>
         <View style={styles.action}>
           <Icon name="user-o" color="black" type="font-awesome" size={20} />
@@ -72,6 +112,7 @@ const SignInScreen = ({navigation}) => {
             style={[styles.textInput]}
             autoCapitalize="none"
             onChangeText={val => textInputChange(val)}
+            onEndEditing={(e)=>handleValidUser(e.nativeEvent.text)}
           />
           {data.check_textInputChange ? (
             <Animatable.View animation="bounceIn">
@@ -84,15 +125,22 @@ const SignInScreen = ({navigation}) => {
             </Animatable.View>
           ) : null}
         </View>
+        {data.isValidUser ? null : 
+                <Animatable.View animation="fadeInLeft" duration={500}>
+                <Text style={styles.errorMsg}>
+                  Username must be 4 characters long.
+                </Text>
+              </Animatable.View>
+        }
         <Text style={[styles.text_footer, {marginTop: 20}]}>Password</Text>
         <View style={styles.action}>
           <Icon name="lock" color="black" type="font-awesome" size={20} />
           <TextInput
-            placeholder="Please input your Email."
+            placeholder="Please input your Password."
             style={[styles.textInput]}
             autoCapitalize="none"
             secureTextEntry={data.secureTextEntry}
-            onChangeText={val => textPasswordChange(val)}
+            onChangeText={val => handlePasswordChange(val)}
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
             {data.secureTextEntry ? (
@@ -107,23 +155,34 @@ const SignInScreen = ({navigation}) => {
             )}
           </TouchableOpacity>
         </View>
+        {data.isValidPassword ? null : 
+          <Animatable.View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>
+              Password must be 8 characters long.
+            </Text>
+          </Animatable.View>
+        }
         <View style={styles.button}>
           <TouchableOpacity
-                    style={styles.signIn}
-                    onPress={() => {loginHandle(data.username,data.password)}}>
-          <LinearGradient colors={['#08d4c4', '#01ab9d']} style={styles.signIn}>
-            <Text
-              style={[styles.textSign,{color:'#fff'}]}>
-              Sign In
-            </Text>
+            style={styles.signIn}
+            onPress={() => {
+              loginHandle(data.username, data.password);
+            }}>
+            <LinearGradient
+              colors={['#08d4c4', '#01ab9d']}
+              style={styles.signIn}>
+              <Text style={[styles.textSign, {color: '#fff'}]}>Sign In</Text>
             </LinearGradient>
-            </TouchableOpacity>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={()=>navigation.navigate('SignUpScreen')}
-              style={[styles.signIn,{borderColor:'#009387',borderWidth:1,marginTop:15}]}>
-              <Text>Sign Up</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SignUpScreen')}
+            style={[
+              styles.signIn,
+              {borderColor: '#009387', borderWidth: 1, marginTop: 15},
+            ]}>
+            <Text>Sign Up</Text>
+          </TouchableOpacity>
         </View>
       </Animatable.View>
     </View>

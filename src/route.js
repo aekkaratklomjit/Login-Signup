@@ -16,6 +16,7 @@ import { AuthContext } from './components/context';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const Drawer = createDrawerNavigator();
 function AppNavigator() {
   // const [isLoading,setIsLoading] = React.useState(true);
@@ -58,17 +59,16 @@ function AppNavigator() {
   }
   const [loginState,dispath] = React.useReducer(loginReducer,initiaLoginState)
   const authContext = React.useMemo(()=>({
-    signIn:async(userName,password)=>{
+    signIn:async(foundUser)=>{
       // setUserToken('Test');
       // setIsLoading(false);
-      let userToken;
-      userToken = null;
-      if(userName == 'user' && password == 'pass'){
-        try{
+      const userToken = String(foundUser[0].userToken);
+      const userName = foundUser[0].userName
+      try{
           userToken='Token'
           await AsyncStorage.setItem('userToken',userToken)
-        }catch(e){console.log(e)}
-      }
+      }catch(e)
+      {console.log(e)}
       dispath({type:'LOGIN',id:userName,token:userToken})
     },
     signOut:async()=>{
